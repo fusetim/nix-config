@@ -110,7 +110,11 @@
       };
     };
 
-    services.gpg-agent.enable = true;
+    services.gpg-agent = {
+      enable = true;
+      enableSshSupport = true;
+      sshKeys = [ "4816636DB9926BAB687C3E3833623CEB4EA25670" ];
+    };
 
     programs.firefox.package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
     nixExtensions = [
