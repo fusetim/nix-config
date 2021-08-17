@@ -1,0 +1,20 @@
+= NixConfigs
+FuseTim
+
+1. First thing first, you should install NixOS on a USB Drive and boot on it.
+2. You sould create a LUKS drive (using cryptsetup)
+   Likely using `cryptsetup --type luks1 luksFormat /dev/sdX cryptoroot`
+3. Do not forget to create a FAT32 partition of 512M for the /boot/efi (UEFI).
+4. You should create the LVM partitions: 
+   Likely using `pvcreate`, `vgcreate` and `lvcreate`.
+5. Mount the partition (root in `/mnt` & boot in `/mnt/boot/efi`)
+6. Generate config `nixos-generate-config`.
+7. Set the hostname as needed
+8. Enable Nix Flakes and add the nixos unstable channel
+9. Clone this repository and from the generated config get the needed info for the /hardware/
+10. `cp nix-config/* /mnt/etc/nixos/`
+11. `nixos-install` & reboot
+12. Enjoy!
+
+== License
+Licensed under both the MIT license and the Apache License 2.0.
