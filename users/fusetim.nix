@@ -150,17 +150,6 @@
     '';
   };
 
-    # Unlock & mount encrypted /dev/sda6 on boot
-    systemd.user.services.veraboot = {
-        Unit = {
-            Description = "Unlock & mount encrypted /dev/sda6 on boot";
-        };
-        Service.ExecStart = ''
-        veracrypt -t --mount /dev/sda6 --non-interactive --keyfiles=/home/fusetim/Privé/data_
-        '';
-        Install.WantedBy = [ "graphical-session.target" ];
-    };
-
     dconf.settings = {
       "com/gexperts/Tilix" = {
         "quake-specific-monitor"=0;
@@ -178,5 +167,17 @@
         "profiles/2b7c4080-0ddd-46c5-8f23-563fd3ba789d/visible-name"="Default";
       };
     };
+  };
+  
+  # Unlock & mount encrypted /dev/sda6 on boot
+  systemd.services.veraboot = {
+      description = "Unlock & mount encrypted /dev/sda6 on boot";
+      serviceConfig = { 
+        User = "root";
+        ExecStart = ''
+        ${pkgs.veracrypt}/bin/veracrypt -t --mount /dev/sda6 --non-interactive --keyfiles=/home/fusetim/Privé/data_
+        '';
+      };
+      wantedBy = [ "graphical-session.target" ];
   };
 }
