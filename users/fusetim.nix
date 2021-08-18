@@ -25,6 +25,8 @@
       "text/html" = [ "firefox.desktop" ];
     };
 
+    home.sessionVariables.SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
+
     home.packages = with pkgs.unstable;
       ([
         manpages
@@ -113,7 +115,7 @@
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      sshKeys = [ "4816636DB9926BAB687C3E3833623CEB4EA25670" ];
+      sshKeys = [ "615397D079566C7AB2ECB5C00AFE0B710D3D8527" ];
     };
 
     programs.firefox.package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
