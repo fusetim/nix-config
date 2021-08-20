@@ -13,6 +13,14 @@
 
 
   # programs.adb.enable = true;
+  virtualisation = {
+      podman = {
+        enable = true;
+
+        # Create a `docker` alias for podman, to use it as a drop-in replacement
+        dockerCompat = true;
+      };
+    };
 
   home-manager.users.fusetim = {
     /*home.file = builtins.removeAttrs (lib.listToAttrs (map (name:
