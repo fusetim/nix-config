@@ -1,20 +1,84 @@
 = NixConfigs
 FuseTim
 
-1. First thing first, you should install NixOS on a USB Drive and boot on it.
-2. You sould create a LUKS drive (using cryptsetup)
-   Likely using `cryptsetup --type luks1 luksFormat /dev/sdX cryptoroot`
-3. Do not forget to create a FAT32 partition of 512M for the /boot/efi (UEFI).
-4. You should create the LVM partitions: 
+* First thing first, you should install NixOS on a USB Drive and boot on it.
+* Create a FAT32 partition of 512M for the /boot/efi (UEFI), flag it as `esp,boot`.
+* You sould create a LUKS drive (using cryptsetup) +
+   Likely using `cryptsetup --type luks1 luksFormat /dev/sdXX` +
+   Unlock it with `cryptsetup luksOpen /dev/sdXX cryptoroot`
+* You should create the LVM partitions: 
    Likely using `pvcreate`, `vgcreate` and `lvcreate`.
-5. Mount the partition (root in `/mnt` & boot in `/mnt/boot/efi`)
-6. Generate config `nixos-generate-config`.
-7. Set the hostname as needed
-8. Enable Nix Flakes and add the nixos unstable channel
-9. Clone this repository and from the generated config get the needed info for the /hardware/
-10. `cp nix-config/* /mnt/etc/nixos/`
-11. `nixos-install` & reboot
-12. Enjoy!
+[source,sh]
+----
+   # pvcreate /dev/mapper/cryptoroot
+   # vgcreate vg-root /dev/mapper/cryptoroot
+   # lvcreate -L 8G -n swap vg-root
+   # lvcreate -l 100%FREE -n root vg-root
+----
+
+* Format the root and swap partitions: 
+[source,sh]
+----
+   # mkfs.ext4 /dev/vg-root/root
+   # mkswap /dev/vg-root/swap
+----
+
+* Mount the partition (root in `/mnt` & boot in `/mnt/boot/efi`)
+[source,sh]
+----
+   # mount /dev/vg-root/root /mnt
+   # mkdir -p /mnt/boot/efi
+   # mount /dev/sda1 /mnt/boot/efi
+----
+
+* Generate NixOS config: 
+
+NOTE: You might need to activate SWAP : `swapon /dev/vg-root/swap`
+
+[source,sh]
+----
+   # nixos-generate-config --root /mnt
+----
+
+* Setup NixFlakes and set hostname
+
+./mnt/etc/nixos/configuration.nix
+[source,nix]
+----
+{ config, pkgs, ... }:
+
+{
+  imports = 
+   [
+      # ...
+   ]
+
+# Just below the import !!!
+
+  nix = {
+    package = pkgs.nixUnstable;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
+
+  networking.hostname = "value";
+
+# ...
+}
+----
+
+* Clone this repository and from the generated config get the needed info for /hardware/
+
+[source,sh]
+----
+   $ cd /tmp
+   $ git clone https://github.com/fusetim/nix-config.git
+   # cp -r /tmp/nix-config/* /mnt/etc/nixos/
+----
+
+* `nixos-install` & reboot
+* Enjoy!
 
 == License
 Licensed under both the MIT license and the Apache License 2.0.
