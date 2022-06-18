@@ -4,7 +4,7 @@
   users.extraUsers.fusetim = {
     isNormalUser = true;
     home = "/home/fusetim";
-    extraGroups = [ "wheel" "networkmanager" "audio" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "audio" "docker" "adbusers"];
     shell = pkgs.unstable.fish;
   };
 
@@ -23,11 +23,11 @@
     };
 
   home-manager.users.fusetim = {
-    /*home.file = builtins.removeAttrs (lib.listToAttrs (map (name:
-      (lib.nameValuePair ".config/${name}" ({
-        source = "${david-config}/${name}";
-      }))) (builtins.attrNames (builtins.readDir david-config))))
-      [ ".config/fish" ];*/
+    #home.file = builtins.removeAttrs (lib.listToAttrs (map (name:
+    #  (lib.nameValuePair ".config/${name}" ({
+    #    source = "${david-config}/${name}";
+    #  }))) (builtins.attrNames (builtins.readDir david-config))))
+    #  [ ".config/fish" ];
 
     xdg.mimeApps.defaultApplications = {
       "text/html" = [ "firefox.desktop" ];
@@ -72,7 +72,7 @@
         thunderbird
         tilix
         # tmate
-
+        keybase-gui
         # fonts:
         noto-fonts
         noto-fonts-cjk
@@ -82,6 +82,7 @@
         fira-code-symbols
         mplus-outline-fonts 
         powerline-fonts
+#	google-fonts
       ]);
 
     home.keyboard = null; # Let system chose keyboard
@@ -111,7 +112,7 @@
       userEmail = "fusetim@gmx.com";
       signing = {
         signByDefault = true;
-        key = "834FC9B89A29FF8D12455DA01F805639A93F5E4B";
+        key = "0CB8724AFDD5DA556CC6670C516F1BE7A8CA3DE7";
       };
       extraConfig = {
         init = {
@@ -123,8 +124,11 @@
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      sshKeys = [ "615397D079566C7AB2ECB5C00AFE0B710D3D8527" ];
+      sshKeys = [ "EC4FE497CBD60DFCEF798EF7D558B63F6A06B6D0" ];
     };
+
+    services.keybase.enable = true;
+    services.kbfs.enable = true;
 
     programs.firefox.package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
     nixExtensions = [
@@ -176,7 +180,8 @@
       };
     };
   };
-  
+
+
   # Unlock & mount encrypted /dev/sda6 on boot
   systemd.services.veraboot = {
       description = "Unlock & mount encrypted /dev/sda6 on boot";

@@ -3,7 +3,7 @@
 {
   imports = [ ./users/fusetim.nix ];
 
-  system.stateVersion = "21.05";
+  system.stateVersion = "22.05";
 
   time.timeZone = "Europe/Paris";
 

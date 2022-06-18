@@ -42,10 +42,11 @@
     # bluez
     # and veracrypt...
     veracrypt
+    gparted
   ];
 
   programs.nm-applet.enable = true;
-
+  programs.adb.enable = true;
   # hardware.bluetooth.enable = false;
 
   home-manager.useGlobalPkgs = true;
