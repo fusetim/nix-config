@@ -1,9 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./users/fusetim.nix ];
+#  imports = [ ./users/fusetim.nix ];
 
-  system.stateVersion = "21.05";
+  system.stateVersion = "22.11";
 
   time.timeZone = "Europe/Paris";
 
@@ -13,6 +13,7 @@
   networking.wireless.enable = false;
 
   fonts.fontconfig.enable = true;
+  fonts.fontDir.enable = true;
 
   hardware.opengl = {
     enable = config.services.xserver.enable;
@@ -24,5 +25,15 @@
     support32Bit = true;
   };
 
-  environment.systemPackages = with pkgs; [ neovim git ];
+  environment.systemPackages = with pkgs; [ 
+    neovim git 
+  ];
+
+  # Garbage collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+  nix.settings.auto-optimise-store = true;
 }

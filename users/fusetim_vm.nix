@@ -4,7 +4,7 @@
   users.extraUsers.fusetim = {
     isNormalUser = true;
     home = "/home/fusetim";
-    extraGroups = [ "wheel" "networkmanager" "audio" "docker" "adbusers" "vboxusers"];
+    extraGroups = [ "wheel" "networkmanager" "audio" "vboxusers"];
     shell = pkgs.unstable.fish;
   };
 
@@ -13,14 +13,13 @@
   fonts.fontDir.enable = true;
 
   # programs.adb.enable = true;
-  virtualisation = {
-      podman = {
-        enable = true;
-
-        # Create a `docker` alias for podman, to use it as a drop-in replacement
-        dockerCompat = true;
-      };
-    };
+  # virtualisation = {
+  #     podman = {
+  #       enable = true;
+  #       # Create a `docker` alias for podman, to use it as a drop-in replacement
+  #       dockerCompat = true;
+  #     };
+  #   };
 
   home-manager.users.fusetim = {
     #home.file = builtins.removeAttrs (lib.listToAttrs (map (name:
@@ -34,23 +33,19 @@
     };
 
     home.sessionVariables.SSH_AUTH_SOCK = "/run/user/1000/gnupg/S.gpg-agent.ssh";
-    home.sessionVariables.OCAMLPATH = "${pkgs.ocamlPackages.graphics}/lib/ocaml/${pkgs.ocaml.version}/site-lib/:${pkgs.ocamlPackages.benchmark}/lib/ocaml/${pkgs.ocaml.version}/site-lib/";
-    home.sessionVariables.CAML_LD_LIBRARY_PATH = "${pkgs.ocamlPackages.graphics}/lib/ocaml/${pkgs.ocaml.version}/site-lib/stublibs:${pkgs.ocamlPackages.benchmark}/lib/ocaml/${pkgs.ocaml.version}/site-lib/stublibs";    
-
-    home.stateVersion = "22.11";
 
     home.packages = with pkgs.unstable;
       ([
         man-pages
         htop
-        ntfs3g
+        #ntfs3g
         tmux
         acpi
         # git
         psmisc
         pciutils
-        tor
-        torsocks
+        #tor
+        #torsocks
         fortune
         ponysay
         rustup
@@ -61,16 +56,13 @@
         unzip
         gnupg
         wget
-        libreoffice
+        dig
         ffmpeg
-        powerline-fonts 
-        musikcube
-        appimage-run
-        yt-dlp
+       
         # LaTeX
-        texlive.combined.scheme-full
+        texlive.combined.scheme-small
 
-        python311
+        python python311
 
         # MP2I/MPI requirements
         gcc11 gdb valgrind gnumake # C
@@ -79,7 +71,6 @@
         ocaml
         ocamlPackages.findlib
         ocamlPackages.graphics # need an overlay to work
-        ocamlPackages.benchmark
         ocamlPackages.ocaml_lwt       
         ocamlPackages.ocaml_oasis     
         ocamlPackages.utop  
@@ -87,25 +78,23 @@
         ocamlPackages.core_extended
         ocamlPackages.merlin
         ocamlPackages.ocp-indent
-        ocamlPackages.ocaml-lsp
 
-        cm_unicode
         asciidoc-full asciidoctor pandoc rubyPackages.rouge ruby cmake wrapGAppsHook gdk-pixbuf cairo pango libxml2 bison flex
       ] ++ pkgs.lib.optionals config.services.xserver.enable [ # Graphical
         glxinfo
-        minecraft
-        discord
-        thunderbird
+        # minecraft
+        # discord
+        # thunderbird
         vlc
+        vscode
         flameshot
-        element-desktop
+        # element-desktop
         inxi
         neofetch
-        thunderbird
         tilix
-        inkscape
+        # inkscape
         # tmate
-        keybase-gui
+        # keybase-gui
         # fonts:
         noto-fonts
         noto-fonts-cjk
@@ -119,20 +108,6 @@
       ]);
 
     home.keyboard = null; # Let system chose keyboard
-
-    programs.vscode = {
-      enable = true;
-      package = pkgs.vscode;
-      mutableExtensionsDir = true;
-      extensions = with pkgs.vscode-extensions; [
-        ms-vscode.cpptools
-        ocamllabs.ocaml-platform
-        matklad.rust-analyzer
-        asciidoctor.asciidoctor-vscode
-        jnoortheen.nix-ide
-        ms-python.python
-      ];
-    };
 
     programs.fish = {
       enable = true;
@@ -174,8 +149,8 @@
       sshKeys = [ "EC4FE497CBD60DFCEF798EF7D558B63F6A06B6D0" ];
     };
 
-    services.keybase.enable = true;
-    services.kbfs.enable = true;
+    # services.keybase.enable = true;
+    # services.kbfs.enable = true;
 
     programs.firefox.package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
     nixExtensions = [
@@ -241,24 +216,24 @@
   #    wantedBy = [ "graphical-session.target" ];
   #};
 
-  services.syncthing = {
-    enable = true;
-    user = "fusetim";
-    dataDir = "/home/fusetim/Syncthing";
-    configDir = "/home/fusetim/Syncthing/.config/syncthing";
-    overrideDevices = true;     # overrides any devices added or deleted through the WebUI
-    overrideFolders = true;     # overrides any folders added or deleted through the WebUI
-    devices = {
-      "athena" = { id = "QTOIIFV-3CPTOSM-TQD52YX-MQ3PT52-QSYNR6T-W7VEMG7-ITUGCFR-6IGYAAL"; };
-      "nemesis" = { id = "DMOMXWC-6BYYZ7A-4SVUIXV-VOEQVCX-2Y6KJBS-BWS2RO6-DAFVVYP-YZLM7Q5"; };
-      "dice" = { id = "T4OM4P2-UZTNLGI-NQIQL3P-6D6GIZM-CVEWSVN-EFPIADC-BGFRIPO-FQH4SAO"; };
-    };
-    folders = {
-      "Documents" = {        # Name of folder in Syncthing, also the folder ID
-        path = "/home/fusetim/Documents";    # Which folder to add to Syncthing
-        devices = [ "athena" "nemesis" ];      # Which devices to share the folder with
-      };
-    };
-  };
+  # services.syncthing = {
+  #   enable = true;
+  #   user = "fusetim";
+  #   dataDir = "/home/fusetim/Syncthing";
+  #   configDir = "/home/fusetim/Syncthing/.config/syncthing";
+  #   overrideDevices = true;     # overrides any devices added or deleted through the WebUI
+  #   overrideFolders = true;     # overrides any folders added or deleted through the WebUI
+  #   devices = {
+  #     "athena" = { id = "QTOIIFV-3CPTOSM-TQD52YX-MQ3PT52-QSYNR6T-W7VEMG7-ITUGCFR-6IGYAAL"; };
+  #     "nemesis" = { id = "DMOMXWC-6BYYZ7A-4SVUIXV-VOEQVCX-2Y6KJBS-BWS2RO6-DAFVVYP-YZLM7Q5"; };
+  #     "dice" = { id = "T4OM4P2-UZTNLGI-NQIQL3P-6D6GIZM-CVEWSVN-EFPIADC-BGFRIPO-FQH4SAO"; };
+  #   };
+  #   folders = {
+  #     "Documents" = {        # Name of folder in Syncthing, also the folder ID
+  #       path = "/home/fusetim/Documents";    # Which folder to add to Syncthing
+  #       devices = [ "athena" "nemesis" ];      # Which devices to share the folder with
+  #     };
+  #   };
+  # };
 
 }

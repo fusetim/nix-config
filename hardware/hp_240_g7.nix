@@ -11,7 +11,7 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/b873cda0-692e-496b-bf1e-5dec47d78227";
+    { device = "/dev/disk/by-uuid/5b1f5763-bfff-4407-bdad-bf2decbdb685";
       fsType = "ext4";
     };
 
@@ -21,7 +21,7 @@
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/753ebd02-bc8a-4787-a257-f6d02c11d6c8"; }
+    [ { device = "/dev/disk/by-uuid/fc1ddd4f-e440-4fa4-b484-a331b5766cd1"; }
     ];
 
   # Boot sections
@@ -37,7 +37,7 @@
   };
   boot.initrd = {
     luks.devices."root" = {
-      device = "/dev/disk/by-uuid/d3b6e759-8ca7-4c0b-b75f-f17585c5d426";
+      device = "/dev/disk/by-uuid/4ec35b05-edbb-4536-9b41-1cc86f5099eb";
       preLVM = true;
       keyFile = "/keyfile0.bin";
     };
@@ -54,6 +54,7 @@
   };
   services.xserver.layout = "fr";
   services.xserver.xkbOptions = "eurosign:e";
+  services.xserver.digimend.enable = true; # Support for HUION Graphic Tablets
 
   # Enable sound
   sound.enable = true;
@@ -70,7 +71,7 @@
   # hardware.bluetooth.enable=true;
 
   # Optimize batterie usage
-  nix.maxJobs = lib.mkDefault 4;
+  nix.settings.max-jobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
   # Network settings

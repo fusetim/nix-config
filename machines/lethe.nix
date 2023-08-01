@@ -1,8 +1,8 @@
 { pkgs, config, ... }: {
 
-  imports = [ ../hardware/hp_240_g7.nix ../common.nix ../users/fusetim.nix ];
+  imports = [ ../hardware/virtualbox_hw.nix ../common.nix ../users/fusetim_vm.nix ];
 
-  networking.hostName = "hermaphrodite";
+  networking.hostName = "lethe";
   
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -16,13 +16,12 @@
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "fusetim";
+  
+  # Enable VirtualBox Shared Folders 
+  users.users.fusetim.extraGroups = [ "vboxsf" ];
 
   environment.systemPackages = with pkgs; [
     # KDE related packages
-    # pkgs.unstable.nixgl.auto.nixGLDefault
-    pkgs.unstable.nixgl.nixGLIntel
-    pkgs.unstable.nixgl.nixVulkanIntel
-    
     ark
     dolphin
     dconf
@@ -42,16 +41,11 @@
     kdeconnect
     plasma-nm
     kate
-    # Bluetooth utilities
-    # bluedevil
-    # bluez
-    # and veracrypt...
-#    veracrypt
     gparted
   ];
 
   programs.nm-applet.enable = true;
-  programs.adb.enable = true;
+  # programs.adb.enable = true;
   # hardware.bluetooth.enable = false;
 
   home-manager.useGlobalPkgs = true;
@@ -68,8 +62,5 @@
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
-
-  # Oracle VirtualBox (HOST)
-  virtualisation.virtualbox.host.enable = true;
 }
   
