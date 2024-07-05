@@ -13,14 +13,16 @@
   fonts.fontDir.enable = true;
 
   # programs.adb.enable = true;
-  virtualisation = {
-      podman = {
-        enable = true;
-
+  #virtualisation = {
+  #    podman = {
+  #      enable = true;
+  #
         # Create a `docker` alias for podman, to use it as a drop-in replacement
-        dockerCompat = true;
-      };
-    };
+  #      dockerCompat = true;
+  #
+  #      dockerSocket.enable = true;
+  #    };
+  #  };
 
   home-manager.users.fusetim = {
     #home.file = builtins.removeAttrs (lib.listToAttrs (map (name:
@@ -67,6 +69,7 @@
         musikcube
         appimage-run
         yt-dlp
+#        docker-compose
         # LaTeX
         texlive.combined.scheme-full
 
@@ -76,27 +79,24 @@
         gcc11 gdb valgrind gnumake # C
 
         # OCaml
-        ocaml
-        ocamlPackages.findlib
-        ocamlPackages.graphics # need an overlay to work
-        ocamlPackages.benchmark
-        ocamlPackages.ocaml_lwt       
-        ocamlPackages.ocaml_oasis     
-        ocamlPackages.utop  
-        ocamlPackages.core
-        ocamlPackages.core_extended
-        ocamlPackages.merlin
-        ocamlPackages.ocp-indent
-        ocamlPackages.ocaml-lsp
+#        ocaml
+#        ocamlPackages.findlib
+#        ocamlPackages.graphics # need an overlay to work
+#        ocamlPackages.benchmark
+#        ocamlPackages.ocaml_lwt       
+#        ocamlPackages.ocaml_oasis     
+#        ocamlPackages.utop  
+#        ocamlPackages.core
+#        ocamlPackages.core_extended
+#        ocamlPackages.merlin
+#        ocamlPackages.ocp-indent
+#        ocamlPackages.ocaml-lsp
 
         cm_unicode
         asciidoc-full asciidoctor pandoc rubyPackages.rouge ruby cmake wrapGAppsHook gdk-pixbuf cairo pango libxml2 bison flex
       ] ++ pkgs.lib.optionals config.services.xserver.enable [ # Graphical
         glxinfo
-        minecraft
-        discord
         thunderbird
-        vlc
         flameshot
         element-desktop
         inxi
@@ -115,6 +115,7 @@
         fira-code-symbols
         mplus-outline-fonts.githubRelease
         powerline-fonts
+        iosevka
 #	google-fonts
       ]);
 
@@ -130,7 +131,7 @@
         matklad.rust-analyzer
         asciidoctor.asciidoctor-vscode
         jnoortheen.nix-ide
-        ms-python.python
+        # ms-python.python
       ];
     };
 
@@ -248,12 +249,12 @@
     configDir = "/home/fusetim/Syncthing/.config/syncthing";
     overrideDevices = true;     # overrides any devices added or deleted through the WebUI
     overrideFolders = true;     # overrides any folders added or deleted through the WebUI
-    devices = {
+    settings.devices = {
       "athena" = { id = "QTOIIFV-3CPTOSM-TQD52YX-MQ3PT52-QSYNR6T-W7VEMG7-ITUGCFR-6IGYAAL"; };
       "nemesis" = { id = "DMOMXWC-6BYYZ7A-4SVUIXV-VOEQVCX-2Y6KJBS-BWS2RO6-DAFVVYP-YZLM7Q5"; };
       "dice" = { id = "T4OM4P2-UZTNLGI-NQIQL3P-6D6GIZM-CVEWSVN-EFPIADC-BGFRIPO-FQH4SAO"; };
     };
-    folders = {
+    settings.folders = {
       "Documents" = {        # Name of folder in Syncthing, also the folder ID
         path = "/home/fusetim/Documents";    # Which folder to add to Syncthing
         devices = [ "athena" "nemesis" ];      # Which devices to share the folder with

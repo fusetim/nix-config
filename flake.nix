@@ -1,10 +1,10 @@
 {
   inputs.nixos.url = "github:nixos/nixpkgs/nixos-unstable";
 
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
   inputs.nixpkgs_unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  inputs.home-manager.url = "github:nix-community/home-manager/release-23.05";
+  inputs.home-manager.url = "github:nix-community/home-manager/release-24.05";
   inputs.home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
   inputs.discord-src.url = "tarball+https://discord.com/api/download?platform=linux&format=tar.gz";
@@ -48,18 +48,18 @@
                   });
                 })
                 # OCaml and Graphics overlay
-                (final: prev: {
-                  ocaml = final.symlinkJoin rec {
-                    inherit (prev.ocaml) name;
-                    version = final.lib.getVersion prev.ocaml;
-                    paths = [ prev.ocaml ];
-                    buildInputs = [ final.makeWrapper ];
-                    postBuild = ''
-                    wrapProgram $out/bin/ocaml \
-                        --add-flags "-I ${final.ocamlPackages.findlib}/lib/ocaml/${version}/site-lib"
-                    '';
-                  };
-                })
+#                 (final: prev: {
+#                   ocaml = final.symlinkJoin rec {
+#                     inherit (prev.ocaml) name;
+#                     version = final.lib.getVersion prev.ocaml;
+#                     paths = [ prev.ocaml ];
+#                     buildInputs = [ final.makeWrapper ];
+#                     postBuild = ''
+#                     wrapProgram $out/bin/ocaml \
+#                         --add-flags "-I ${final.ocamlPackages.findlib}/lib/ocaml/${version}/site-lib"
+#                     '';
+#                   };
+#                 })
               ];
             };
           })
@@ -77,20 +77,6 @@
           (import ./machines/hermaphrodite.nix)
           unstable-module
           home-manager.nixosModules.home-manager
-        ];
-      };
-      nixosConfigurations.lethe = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit nixpkgs_unstable; };
-        modules = [
-          (_args: {
-            system.configurationRevision =
-              nixpkgs.lib.mkIf (self ? rev) self.rev;
-          })
-          (import ./machines/lethe.nix)
-          unstable-module
-          home-manager.nixosModules.home-manager
-#          "${nixos}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
         ];
       };
 
